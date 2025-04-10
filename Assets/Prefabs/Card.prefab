@@ -464,6 +464,7 @@ MonoBehaviour:
   back: {fileID: 4817154286629023438}
   anim: {fileID: 114951747761163393}
   idx: 0
+  isOpen: 0
   frontImage: {fileID: 4170870632867751199}
 --- !u!95 &114951747761163393
 Animator:

@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class Card : MonoBehaviour
 {
@@ -55,7 +56,7 @@ public class Card : MonoBehaviour
         }
     }
     
-     public void CardFlip()
+     public void CardFlip()           // 유니티에서 Card 프리펫에 붙어있는 Flip 애니메이션이 실행되는 중, 90도 회전한 순간 front를 비활성화하고 back을 활성화하는 함수
     {
         front.SetActive(true);
         back.SetActive(false);
@@ -64,93 +65,14 @@ public class Card : MonoBehaviour
 
 
 
-    public void ReverseFlip()
+    public void ReverseFlip()       // 유니티에서 Card 프리펫에 붙어있는 ReverseFlip 애니메이션이 실행되는 중, 90도 회전한 순간 back을 비활성화하고 front을 활성화하는 함수
     {
         front.SetActive(false);
         back.SetActive(true);
     }
 
 
-
-
-
-
-     /*
-    public void FlipCard()
-    {
-
-        float targetRotationY = isFlipped ? 0f : 180f; // 현재 카드 상태에 따라 회전할 각도 설정 
-                                                       // isFlipped가 true라면 0도, false라면 180도
-
-        transform.DORotate(new Vector3(0f, targetRotationY, 0f), 1f)   // 회전 애니메이션
-
-
-        .OnUpdate(() =>
-        {
-            if (transform.rotation.eulerAngles.y > 90f)
-            {
-                front.SetActive(false);
-                back.SetActive(true);
-
-            }
-            else
-            {
-                front.SetActive(true);
-                back.SetActive(false);
-            }
-        }).OnComplete(() =>
-        {
-            isFlipped = !isFlipped;
-        });
-        if (GameManager.Instance.firstCard == null)
-        {
-            GameManager.Instance.firstCard = this;
-        }
-        else
-        {
-            GameManager.Instance.secondCard = this;
-            GameManager.Instance.Matched();
-        }
-
-    }
-
-
-    
-    public void Rotate()
-    {
-
-        if (isFlipped) return; // 카드가 이미 뒤집혀 있으면 아무것도 하지 않음
-
-        isFlipped = true; // 카드가 뒤집혔음을 표시
-
-        var sequence = DOTween.Sequence();   // 애니메이션 단계를 순차적으로 실행
-
-        // 90도까지 회전, 중간지점에서 front 비활성화, back 활성화
-        sequence.Append(this.transform.DORotate(this.transform.eulerAngles + new Vector3(0f, 90f, 0f), 0.4f)).SetEase(Ease.Linear); // 90도 회전, 0.4초 소요, SetEase는 애니메이션 가/감속 효과 설정
-
-        // 회전 후 front 비활성화, back 활성화
-        sequence.AppendCallback(() =>
-        {
-           frontImage.sprite = (this.transform.eulerAngles.y < 180) ? frontSpt.sprite : backSpt.sprite; // 오브젝트 y축 회전 각도가 180보다 작다면 forntspt의 스프라이트를 표시, 그렇지 않다면 backSpt의 스프라이트를 표시
-        });                                                                                             // 회전 후 front 비활성화, back 활성화
-
-        sequence.Append(this.transform.DORotate(this.transform.eulerAngles + new Vector3(0f, 180f, 0f), 0.4f)).SetEase(Ease.Linear); // 다시 한번 180도 회전, 0.4초 소요
-        if (GameManager.Instance.firstCard == null)
-        {
-            GameManager.Instance.firstCard = this;
-        }
-        else
-        {
-            GameManager.Instance.secondCard = this;
-            GameManager.Instance.Matched();
-        }
-
-
-    }
-
-    */
-
-    public void Destroy()
+    public void Destroy()           
     {
         Invoke("DestroyCardInvoke", 1f);
     }
@@ -174,11 +96,110 @@ public class Card : MonoBehaviour
         anim.SetBool("isOpen", false);
     }
 
-    public void OpenCompletely()
-    {
-        isOpen = true;
-    }
 
+}
+
+
+/*
+현재 사용하지 않는 코드입니다.
+
+public void OpenCompletely()              // 유니티에서 Card 프리펫에 붙어있는 Flip 애니메이션이 실행되고 나면 isOpen을 true로 바꿔주는 함수
+{
+    isOpen = true;
+}
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 카드를 뒤집으려 시도했다가 실패한 코드
+
+/*
+public void FlipCard()
+{
+
+   float targetRotationY = isFlipped ? 0f : 180f; // 현재 카드 상태에 따라 회전할 각도 설정 
+                                                  // isFlipped가 true라면 0도, false라면 180도
+
+   transform.DORotate(new Vector3(0f, targetRotationY, 0f), 1f)   // 회전 애니메이션
+
+
+   .OnUpdate(() =>
+   {
+       if (transform.rotation.eulerAngles.y > 90f)
+       {
+           front.SetActive(false);
+           back.SetActive(true);
+
+       }
+       else
+       {
+           front.SetActive(true);
+           back.SetActive(false);
+       }
+   }).OnComplete(() =>
+   {
+       isFlipped = !isFlipped;
+   });
+   if (GameManager.Instance.firstCard == null)
+   {
+       GameManager.Instance.firstCard = this;
+   }
+   else
+   {
+       GameManager.Instance.secondCard = this;
+       GameManager.Instance.Matched();
+   }
+
+}
+
+
+
+public void Rotate()
+{
+
+   if (isFlipped) return; // 카드가 이미 뒤집혀 있으면 아무것도 하지 않음
+
+   isFlipped = true; // 카드가 뒤집혔음을 표시
+
+   var sequence = DOTween.Sequence();   // 애니메이션 단계를 순차적으로 실행
+
+   // 90도까지 회전, 중간지점에서 front 비활성화, back 활성화
+   sequence.Append(this.transform.DORotate(this.transform.eulerAngles + new Vector3(0f, 90f, 0f), 0.4f)).SetEase(Ease.Linear); // 90도 회전, 0.4초 소요, SetEase는 애니메이션 가/감속 효과 설정
+
+   // 회전 후 front 비활성화, back 활성화
+   sequence.AppendCallback(() =>
+   {
+      frontImage.sprite = (this.transform.eulerAngles.y < 180) ? frontSpt.sprite : backSpt.sprite; // 오브젝트 y축 회전 각도가 180보다 작다면 forntspt의 스프라이트를 표시, 그렇지 않다면 backSpt의 스프라이트를 표시
+   });                                                                                             // 회전 후 front 비활성화, back 활성화
+
+   sequence.Append(this.transform.DORotate(this.transform.eulerAngles + new Vector3(0f, 180f, 0f), 0.4f)).SetEase(Ease.Linear); // 다시 한번 180도 회전, 0.4초 소요
+   if (GameManager.Instance.firstCard == null)
+   {
+       GameManager.Instance.firstCard = this;
+   }
+   else
+   {
+       GameManager.Instance.secondCard = this;
+       GameManager.Instance.Matched();
+   }
 
 
 }
+
+*/
+
